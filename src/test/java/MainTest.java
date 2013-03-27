@@ -12,6 +12,7 @@ public class MainTest extends JerseyTest {
 
     @Test
     public void testHelloWorld() {
+        //https://gist.github.com/seratch/1080390
         WebResource webResource = resource();
         String responseMsg = webResource.path("timeoftheday/asplaintext/gio").get(String.class);
         System.out.println(responseMsg);
