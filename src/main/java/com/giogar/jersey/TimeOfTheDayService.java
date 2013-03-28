@@ -3,12 +3,11 @@ package com.giogar.jersey;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 
 import com.giogar.jersey.Time;
+import com.giogar.model.Order;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -45,4 +44,16 @@ public class TimeOfTheDayService {
 		t.setTime(df.format(Calendar.getInstance().getTime()));
 		return t;
 	}
+
+
+
+    @POST
+    @Path("publish")
+    @Consumes("application/bson")
+    @Produces("text/text")
+    public Response publish(Order order) {
+        System.out.println("Received order: " + order.getId());
+        return Response.ok(200).build();
+    }
+
 }
