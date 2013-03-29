@@ -12,10 +12,17 @@
 
     <properties>
         <spring.version>3.2.1.RELEASE</spring.version>
+        <jersey-server-version>1.17</jersey-server-version>
         <jersey-version>1.17</jersey-version>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.4.1</version>
+        </dependency>
 
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -26,7 +33,7 @@
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
-            <version>${jersey-version}</version>
+            <version>${jersey-server-version}</version>
         </dependency>
 
         <dependency>

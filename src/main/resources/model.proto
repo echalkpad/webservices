@@ -1,0 +1,48 @@
+package protocolbuffer;
+
+option java_package = "com.giogar.model.protocolbuffer";
+option java_outer_classname = "ProtocolBufferOrder";
+
+
+message Order {
+
+    required int32 id = 1;
+
+    message Address {
+        required string addressLine1 = 1;
+        optional string addressLine2 = 2;
+        optional string addressLine3 = 3;
+
+        enum State {
+            ITALY = 1;
+            IRELAND = 2;
+            FRANCE = 3;
+            UK = 4;
+            SPAIN =5;
+        }
+
+        optional State state = 4;
+
+    }
+
+    required Address shippingAddress = 2;
+
+    message Customer {
+        required string name = 1;
+        required string lastName = 2;
+        optional string phoneNumber = 3;
+        optional Address residentialAddress = 4;
+        optional Address preferredDispatchAddress = 5;
+    }
+
+    required Customer customer = 3;
+
+    message Item {
+        required int32 id = 1;
+        required string description = 2;
+        required int32 quantity = 3;
+    }
+
+    repeated Item items = 4;
+
+}

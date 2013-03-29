@@ -18,7 +18,7 @@ public class VersionTest extends JerseyTest {
 
     @Override
     protected AppDescriptor configure() {
-        return new WebAppDescriptor.Builder("com.giogar.jersey")
+        return new WebAppDescriptor.Builder()
                 .contextParam("contextConfigLocation", "classpath:testApplicationContext.xml")
 //                .contextPath("/")           //<- this messes up.
                 .servletClass(SpringServlet.class)
