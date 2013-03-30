@@ -1,7 +1,9 @@
+package com.giogar.mainclasses;
+
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 
-public class RestTest {
+public class SimpleMainClassTest {
 
 	public static void main(String[] args) {
 

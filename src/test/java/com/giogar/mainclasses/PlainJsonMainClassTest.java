@@ -1,3 +1,5 @@
+package com.giogar.mainclasses;
+
 import com.giogar.model.Item;
 import com.giogar.model.Order;
 import com.google.gson.Gson;
@@ -23,27 +25,18 @@ import static com.giogar.model.fixture.CustomerFixture.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class PerformanceTestPlainJson extends JerseyTest {
+public class PlainJsonMainClassTest extends JerseyTest {
 
-    @Override
-    protected AppDescriptor configure() {
-        return new WebAppDescriptor.Builder("com.giogar.jersey")
-                .contextParam("contextConfigLocation", "classpath:testApplicationContext.xml")
-//                .contextPath("/")           //<- this messes up.
-                .servletClass(SpringServlet.class)
-                .initParam("com.sun.jersey.api.json.POJOMappingFeature", "true")
-                .contextListenerClass(ContextLoaderListener.class)
-                .requestListenerClass(RequestContextListener.class)
-                .build();
-    }
-
-    @Test
-    public void postVersionTest() throws Exception {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
 
         List<Order> orders = getOrders();
 
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10, 10, 5L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
         threadPoolExecutor.prestartAllCoreThreads();
+
+        Client client = Client.create();
+        client.addFilter(new GZIPContentEncodingFilter(false));
+        WebResource resource = client.resource("http://localhost:8080/webservices/services/");
 
         Thread.sleep(5000L);
 
@@ -53,7 +46,7 @@ public class PerformanceTestPlainJson extends JerseyTest {
         List<Future<String>> futures = new ArrayList<Future<String>>();
 
         for (Order order : orders) {
-            futures.add(threadPoolExecutor.submit(new RestThreadClient(order, resource())));
+            futures.add(threadPoolExecutor.submit(new RestThreadClient(order, resource)));
         }
 
         for (Future<String> future : futures) {
@@ -63,6 +56,7 @@ public class PerformanceTestPlainJson extends JerseyTest {
         stopWatch.stop();
 
         System.out.println("Elapsed time: " + stopWatch.prettyPrint());
+
     }
 
     private static List<Order> getOrders() {

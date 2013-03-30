@@ -8,7 +8,7 @@ import org.springframework.web.context.request.RequestContextListener;
 
 import javax.ws.rs.core.MediaType;
 
-public class JerseySpringTest extends JerseyTest {
+public class SimpleSpringTest extends JerseyTest {
 
     @Override
     protected AppDescriptor configure() {

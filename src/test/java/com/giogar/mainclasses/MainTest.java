@@ -1,3 +1,5 @@
+package com.giogar.mainclasses;
+
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.test.framework.JerseyTest;
 import org.junit.Test;
