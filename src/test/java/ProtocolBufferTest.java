@@ -1,14 +1,11 @@
 import com.giogar.model.protocolbuffer.ProtocolBufferOrder;
 import com.giogar.parser.ProtobufMessageReader;
 import com.giogar.parser.ProtobufMessageWriter;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.spi.spring.container.servlet.SpringServlet;
 import com.sun.jersey.test.framework.AppDescriptor;
 import com.sun.jersey.test.framework.JerseyTest;
 import com.sun.jersey.test.framework.WebAppDescriptor;
+import org.junit.Test;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.request.RequestContextListener;
 
@@ -21,26 +18,24 @@ public class ProtocolBufferTest extends JerseyTest {
 
     @Override
     protected AppDescriptor configure() {
-        return new WebAppDescriptor.Builder("com.giogar")
-                .contextParam("contextConfigLocation", "classpath:testApplicationContext.xml")
+        WebAppDescriptor webAppDescriptor =
+                new WebAppDescriptor.Builder()
+                        .contextParam("contextConfigLocation", "classpath:testApplicationContext.xml")
 //                .contextPath("/")           //<- this messes up.
-                .servletClass(SpringServlet.class)
-                .contextListenerClass(ContextLoaderListener.class)
-                .requestListenerClass(RequestContextListener.class)
-
-                .build();
+                        .servletClass(SpringServlet.class)
+                        .contextListenerClass(ContextLoaderListener.class)
+                        .requestListenerClass(RequestContextListener.class)
+                        .build();
+        webAppDescriptor.getClientConfig().getClasses().add(ProtobufMessageWriter.class);
+        webAppDescriptor.getClientConfig().getClasses().add(ProtobufMessageReader.class);
+        return webAppDescriptor;
     }
 
-    //    @Test
+    @Test
     public void postVersionTest() throws Exception {
 
-        ClientConfig cc = new DefaultClientConfig();
-        cc.getClasses().add(ProtobufMessageReader.class);
-        cc.getClasses().add(ProtobufMessageWriter.class);
-
-        Client client = Client.create(cc);
-
-        WebResource resource = client.resource("http://localhost:9998/");
+        // Delay beginning of test or a concurrent exception will be thrown
+        Thread.sleep(5000L);
 
         ProtocolBufferOrder.Order order = ProtocolBufferOrder.Order.newBuilder()
                 .setId(1)
@@ -53,7 +48,7 @@ public class ProtocolBufferTest extends JerseyTest {
                         .setId(1).setDescription("Description")
                         .setQuantity(1).build()).build();
 
-        String response = resource
+        String response = resource()
                 .path("protobuf-customer/save")
                 .type("application/x-protobuf")
                 .accept(MediaType.TEXT_PLAIN)
